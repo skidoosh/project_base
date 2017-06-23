@@ -1,1 +1,4 @@
 .vagrant
+playbook.retry
+.idea
+composer.lock

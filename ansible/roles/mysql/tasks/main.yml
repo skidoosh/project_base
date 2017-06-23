@@ -13,3 +13,34 @@
     name: "{{ item }}"
     state: latest
   with_items: "{{ __packages }}"
+
+- name: Create application database
+  become: true
+  mysql_db:
+    name: "{{ mysql_application_db_name|default('application') }}"
+    encoding: "{{ mysql_application_db_encoding|default('utf8mb4') }}"
+    collation: "{{ mysql_application_db_collation|default('utf8mb4_unicode_ci') }}"
+    state: present
+    login_user: root
+
+- name: Create create_user script
+  become: true
+  template:
+    src: create_user.sql.j2
+    dest: /tmp/create_user.sql
+
+- name: Execute create_user script
+  become: true
+  mysql_db:
+    name: create_user
+    state: import
+    target: /tmp/create_user.sql
+
+- name: Copy config
+  become: true
+  copy:
+    src: files/my.cnf
+    dest: /etc/mysql/conf.d/my.cnf
+    owner: root
+    group: root
+    mode: 0644
