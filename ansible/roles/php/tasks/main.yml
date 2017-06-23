@@ -1,0 +1,38 @@
+---
+- name: Include global variables
+  include_vars: variables/main.yml
+
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: true
+    cache_valid_time: 3600
+
+- name: Install packages
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ __packages }}"
+
+- name: Install nginx server config
+  become: true
+  copy:
+    src: files/nginx.default
+    dest: /etc/nginx/sites-available/default
+    backup: true
+    owner: root
+    group: root
+    mode: 0755
+
+- name: Restart php7.0-fpm
+  become: true
+  service:
+    name: php7.0-fpm
+    state: restarted
+
+- name: Restart nginx
+  become: true
+  service:
+    name: nginx
+    state: restarted

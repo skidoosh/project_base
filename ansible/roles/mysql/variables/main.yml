@@ -1,0 +1,5 @@
+---
+__packages:
+  - mysql-server
+  - mysql-client
+  - mysql-common
