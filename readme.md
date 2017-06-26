@@ -1,3 +1,3 @@
-Install vagrant
-Install vagrant-vbguest vagrant plugin install vagrant-vbguest
-Run vagrant up
+- Install vagrant
+- Install vagrant-vbguest vagrant plugin install vagrant-vbguest
+- Run vagrant up
