@@ -2,3 +2,4 @@
 - hosts: all
   roles:
   - ansible/roles/php
+  - ansible/roles/clamav

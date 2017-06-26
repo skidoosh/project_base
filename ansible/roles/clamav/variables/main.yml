@@ -1,0 +1,4 @@
+---
+__packages:
+  - clamav-daemon
+  - clamav-freshclam
