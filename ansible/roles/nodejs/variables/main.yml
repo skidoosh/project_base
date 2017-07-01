@@ -1,0 +1,5 @@
+---
+__packages:
+  - build-essential
+  - libssl-dev
+  - nodejs

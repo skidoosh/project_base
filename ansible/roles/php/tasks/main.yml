@@ -15,6 +15,15 @@
     state: latest
   with_items: "{{ __packages }}"
 
+- name: Replace fix_pathinfo
+  become: true
+  replace:
+    regexp: '^;cgi\.fix_pathinfo=1$'
+    replace: 'cgi.fix_pathinfo=0'
+    path: '/etc/php/7.0/fpm/php.ini'
+    backup: true
+  notify: restart php-fpm
+
 - name: Install nginx server config
   become: true
   copy:
@@ -24,15 +33,4 @@
     owner: root
     group: root
     mode: 0755
-
-- name: Restart php7.0-fpm
-  become: true
-  service:
-    name: php7.0-fpm
-    state: restarted
-
-- name: Restart nginx
-  become: true
-  service:
-    name: nginx
-    state: restarted
+  notify: restart nginx

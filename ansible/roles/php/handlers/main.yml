@@ -1,5 +1,6 @@
 ---
 - name: restart php-fpm
+  become: true
   service:
-    name: php-fpm
+    name: php7.0-fpm
     state: restarted
