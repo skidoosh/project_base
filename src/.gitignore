@@ -10,3 +10,6 @@ Homestead.yaml
 npm-debug.log
 /.env
 /composer.lock
+public/css/*
+public/js/*
+public/fonts/*
