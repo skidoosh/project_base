@@ -34,3 +34,41 @@
     group: root
     mode: 0755
   notify: restart nginx
+
+- name: Install xdebug if in development
+  become: true
+  apt:
+    name: php-xdebug
+    state: present
+  when: development
+
+- name: Add xdebug config
+  become: true
+  template:
+    src: templates/xdebug.ini.j2
+    dest: /etc/php/7.0/mods-available/xdebug.ini
+    backup: true
+    mode: 0644
+    owner: root
+    group: root
+  when: development
+
+- name: Enable xdebug
+  become: true
+  command: phpenmod xdebug
+  args:
+    creates: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
+  notify: restart php-fpm
+  when: development
+
+- name: Stat {{ php_project_root }}
+  stat:
+    path: "{{ php_project_root }}/composer.json"
+  register: composer_file
+
+- name: "Run composer if {{ php_project_root }}/composer.json exists"
+  command: composer install
+  args:
+    creates: "{{ php_project_root }}/vendor"
+    chdir: "{{ php_project_root }}"
+  when: composer_file.stat.exists

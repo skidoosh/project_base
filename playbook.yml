@@ -1,6 +1,6 @@
 ---
 - hosts: all
   roles:
-  - ansible/roles/php
-  - ansible/roles/nodejs
-  - ansible/roles/clamav
+  - { role: ansible/roles/php, development: true, php_project_root: /var/www/src }
+  - { role: ansible/roles/nodejs }
+  - { role: ansible/roles/clamav }
