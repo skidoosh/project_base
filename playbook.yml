@@ -1,6 +1,23 @@
 ---
 - hosts: all
   roles:
-  - { role: ansible/roles/php, development: true, php_project_root: /var/www/src }
-  - { role: ansible/roles/nodejs }
-  - { role: ansible/roles/clamav }
+  - role: ansible/roles/php
+    php_development: true
+    php_project_root: /var/www/src
+    mysql_databases:
+    - name: 'application'
+    - name: 'testing'
+    mysql_users:
+    - name: 'application'
+      password: 'application'
+      priv: 'application.*:SELECT,INSERT,UPDATE,DELETE'
+    - name: 'testing'
+      password: 'testing'
+      priv: 'testing.*:SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER,DROP'
+  - role: ansible/roles/nodejs
+  - role: ansible/roles/clamav
+    cron_tabs:
+    - dir: '/var/www/src'
+      hour: '*'
+    - dir: '/tmp'
+      hour: '0'

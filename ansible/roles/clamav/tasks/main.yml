@@ -25,3 +25,22 @@
   service:
     name: clamav-daemon
     state: started
+
+- name: Create quarantine dir
+  become: true
+  file:
+    path: "{{ quarantine }}"
+    state: directory
+    mode: 0666
+  when: cron_tabs
+
+- name: Add cron jobs
+  become: true
+  cron:
+    name: "virus scan {{ item.dir }}"
+    job: "clamscan -r --infected --move={{ quarantine }} --exclude={{ quarantine }} {{ item.dir }}"
+    minute: "{{ item.minute | default('0') }}"
+    hour: "{{ item.hour | default('*') }}"
+    state: present
+  with_items: "{{ cron_tabs }}"
+  when: cron_tabs

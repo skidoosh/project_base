@@ -14,27 +14,37 @@
     state: latest
   with_items: "{{ __packages }}"
 
-- name: Create application database
+- name: Create databases
   become: true
   mysql_db:
-    name: "{{ mysql_application_db_name|default('application') }}"
-    encoding: "{{ mysql_application_db_encoding|default('utf8mb4') }}"
-    collation: "{{ mysql_application_db_collation|default('utf8mb4_unicode_ci') }}"
+    name: '{{ item.name }}'
+    login_host: '{{ item.login_host|default("localhost") }}'
+    login_user: '{{ item.login_user|default("") }}'
+    login_password: '{{ item.login_password|default("") }}'
+    login_port: '{{ item.login_port|default("3306") }}'
+    login_unix_socket: '{{ item.login_unix_socket|default("") }}'
+    collation: '{{ item.collation|default("utf8mb4_general_ci") }}'
+    encoding: '{{ item.encoding|default("utf8mb4") }}'
+    state: '{{ item.state|default("present") }}'
+    target: '{{ item.target|default("") }}'
+  with_items: '{{ mysql_databases }}'
+
+- name: Create users
+  become: true
+  mysql_user:
+    name: '{{ item.name }}'
+    password: '{{ item.password }}'
+    check_implicit_admin: true
+    login_host: '{{ item.login_host|default("localhost") }}'
+    login_user: '{{ item.login_user|default("") }}'
+    login_password: '{{ item.login_password|default("") }}'
+    login_port: '{{ item.login_port|default("3306") }}'
+    login_unix_socket: '{{ item.login_unix_socket|default("") }}'
+    encrypted: false
     state: present
-    login_user: root
-
-- name: Create create_user script
-  become: true
-  template:
-    src: create_user.sql.j2
-    dest: /tmp/create_user.sql
-
-- name: Execute create_user script
-  become: true
-  mysql_db:
-    name: create_user
-    state: import
-    target: /tmp/create_user.sql
+    priv: '{{ item.priv }}'
+    update_password: always
+  with_items: '{{ mysql_users }}'
 
 - name: Copy config
   become: true

@@ -40,7 +40,7 @@
   apt:
     name: php-xdebug
     state: present
-  when: development
+  when: php_development
 
 - name: Add xdebug config
   become: true
@@ -51,7 +51,7 @@
     mode: 0644
     owner: root
     group: root
-  when: development
+  when: php_development
 
 - name: Enable xdebug
   become: true
@@ -59,7 +59,7 @@
   args:
     creates: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
   notify: restart php-fpm
-  when: development
+  when: php_development
 
 - name: Stat {{ php_project_root }}
   stat:

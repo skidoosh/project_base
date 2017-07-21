@@ -4,3 +4,6 @@ __packages:
   - mysql-client
   - mysql-common
   - python-mysqldb
+
+mysql_staging: false
+mysql_testing: false

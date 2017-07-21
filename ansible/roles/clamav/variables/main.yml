@@ -2,3 +2,5 @@
 __packages:
   - clamav-daemon
   - clamav-freshclam
+
+quarantine: /var/tmp/quarantine
