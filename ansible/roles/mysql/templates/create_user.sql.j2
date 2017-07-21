@@ -1,4 +1,0 @@
-USE mysql;
-CREATE USER IF NOT EXISTS "{{ mysql_application_db_user_name|default('application') }}"@"localhost" IDENTIFIED VIA mysql_native_password USING "{{ mysql_application_db_user_password|default('*25650E2BC68974CA662A0A2079085B8EC0BD99F0') }}";
-GRANT ALL ON {{ mysql_application_db_name|default('application') }}.* TO "{{ mysql_application_db_user_name|default('application') }}"@"localhost";
-FLUSH PRIVILEGES;
