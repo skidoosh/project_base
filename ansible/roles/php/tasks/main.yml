@@ -35,6 +35,18 @@
     mode: 0755
   notify: restart nginx
 
+#- name: Copy configs
+#  become: true
+#  copy:
+#    src: "files/{{ item }}"
+#    dest: "/etc/apache2/sites-available/{{ item }}"
+#    backup: true
+#    owner: root
+#    group: root
+#    mode: 0755
+#  with_items: "{{ apache_configs }}"
+#  notify: restart apache2
+
 - name: Install xdebug if in development
   become: true
   apt:

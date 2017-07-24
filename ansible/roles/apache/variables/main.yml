@@ -1,0 +1,9 @@
+---
+__packages:
+  - apache2
+  - libapache2-mod-qos
+  - libapache2-mod-php
+
+apache_configs:
+  - 000-default.conf
+  - default-ssl.conf

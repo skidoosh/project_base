@@ -6,7 +6,18 @@ server {
 	index index.html index.htm index.php;
 	server_name _;
 
-	try_files $uri $uri/ /index.php;
+    dav_methods PUT DELETE;
+
+    location / {
+	    try_files $uri $uri/ /index.php;
+	}
+
+    error_page 405 = @app;
+
+    location @app {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
 
 	location ~ \.php$ {
         include snippets/fastcgi-php.conf;

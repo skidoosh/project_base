@@ -10,7 +10,7 @@
     mysql_users:
     - name: 'application'
       password: 'application'
-      priv: 'application.*:SELECT,INSERT,UPDATE,DELETE'
+      priv: 'application.*:SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER,DROP'
     - name: 'testing'
       password: 'testing'
       priv: 'testing.*:SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER,DROP'
