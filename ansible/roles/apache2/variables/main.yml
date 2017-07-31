@@ -1,17 +1,8 @@
 ---
 __apache2_packages:
   - apache2
-  - libapache2-mod-evasive
   - libapache2-mod-php
 
 apache2_configs:
   - 000-default.conf
   - default-ssl.conf
-
-apache2_evasive_hash_table_size: 3097
-apache2_evasive_page_count: 1
-apache2_evasive_site_count: 50
-apache2_evasive_page_interval: 1
-apache2_evasive_site_interval: 1
-apache2_evasive_blocking_period: 10
-apache2_evasive_log_dir: "/var/log/modevasive"

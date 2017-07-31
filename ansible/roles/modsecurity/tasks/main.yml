@@ -45,7 +45,5 @@
 
 - name: Enable mod_security
   become: true
-  apache2_module:
-    name: security2
-    state: present
+  command: a2enmod security2
   notify: restart apache2
