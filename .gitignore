@@ -3,3 +3,5 @@
 playbook.retry
 composer.lock
 src/
+srv/certs/*
+node_modules/

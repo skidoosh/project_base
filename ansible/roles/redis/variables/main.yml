@@ -1,4 +1,4 @@
 ---
-__packages:
+__redis_packages:
   - redis-server
   - redis-tools

@@ -1,5 +1,5 @@
 ---
-__packages:
+__mysql_packages:
   - mysql-server
   - mysql-client
   - mysql-common

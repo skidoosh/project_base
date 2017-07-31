@@ -12,7 +12,7 @@
   apt:
     name: "{{ item }}"
     state: latest
-  with_items: "{{ __packages }}"
+  with_items: "{{ __mysql_packages }}"
 
 - name: Create databases
   become: true
@@ -54,3 +54,4 @@
     owner: root
     group: root
     mode: 0644
+  notify: restart mysql

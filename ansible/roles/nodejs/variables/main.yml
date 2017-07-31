@@ -1,5 +1,5 @@
 ---
-__packages:
+__nodejs_packages:
   - build-essential
   - libssl-dev
   - nodejs

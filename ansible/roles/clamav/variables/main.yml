@@ -1,5 +1,5 @@
 ---
-__packages:
+__clamav_packages:
   - clamav-daemon
   - clamav-freshclam
 

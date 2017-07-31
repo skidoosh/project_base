@@ -1,0 +1,16 @@
+---
+- name: Create server certificate directories before copy
+  become: true
+  file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+  with_items: "{{ ssl_certificates }}"
+  when: ssl_certificates
+
+- name: Copy server certificate
+  become: true
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ ssl_certificates }}"
+  when: ssl_certificates

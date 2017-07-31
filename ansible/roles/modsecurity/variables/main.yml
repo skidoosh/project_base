@@ -1,0 +1,35 @@
+---
+__modsecurity_packages:
+  - libapache2-modsecurity
+  - modsecurity-crs
+
+
+modsec_rule_engine: "On"
+modsec_request_body_access: "On"
+modsec_request_body_limit: 13107200
+modsec_request_body_no_files_limit: 131072
+modsec_request_body_in_memory_limit: 131072
+modsec_request_body_limit_action: "Reject"
+modsec_pcre_match_limit: 100000
+modsec_pcre_match_limit_recursion: 100000
+modsec_response_body_access: "On"
+modsec_response_body_mime_type: "text/plain text/html text/xml"
+modsec_response_body_limit: 524288
+modsec_response_body_limit_action: "ProcessPartial"
+modsec_tmp_dir: "/tmp/"
+modsec_data_dir: "/tmp/"
+modsec_upload_dir: "/opt/modsecurity/var/upload/"
+modsec_upload_keep_files: "RelevantOnly"
+modsec_upload_file_mode: 0600
+modsec_upload_file_limit: 10
+modsec_debug_log: "/var/log/apache2/modsec_debug.log"
+modsec_debug_log_level: 3
+modsec_audit_engine: "RelevantOnly"
+modsec_audit_log_relevant_status: "\"^(?:5|4(?!04))\""
+modsec_audit_log_parts: "ABIJDEFHZ"
+modsec_audit_log_type: "Concurrent"
+modsec_log_dir: "/var/log/modsecurity"
+modsec_audit_log: "/var/log/modsecurity/modsec_audit.log"
+modsec_audit_log_storage_dir: "/var/log/modsecurity/audit/"
+modsec_status_engine: "On"
+modsec_intercept_on_error: "Off"

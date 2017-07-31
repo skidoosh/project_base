@@ -13,7 +13,7 @@
   apt:
     name: "{{ item }}"
     state: latest
-  with_items: "{{ __packages }}"
+  with_items: "{{ __php7_packages }}"
 
 - name: Replace fix_pathinfo
   become: true
@@ -22,37 +22,25 @@
     replace: 'cgi.fix_pathinfo=0'
     path: '/etc/php/7.0/fpm/php.ini'
     backup: true
-  notify: restart php-fpm
+  notify: restart php7-fpm
 
-- name: Install nginx server config
-  become: true
-  copy:
-    src: files/nginx.default
-    dest: /etc/nginx/sites-available/default
-    backup: true
-    owner: root
-    group: root
-    mode: 0755
-  notify: restart nginx
-
-#- name: Copy configs
+#- name: Install nginx server config
 #  become: true
 #  copy:
-#    src: "files/{{ item }}"
-#    dest: "/etc/apache2/sites-available/{{ item }}"
+#    src: files/nginx.default
+#    dest: /etc/nginx/sites-available/default
 #    backup: true
 #    owner: root
 #    group: root
 #    mode: 0755
-#  with_items: "{{ apache_configs }}"
-#  notify: restart apache2
+#  notify: restart nginx
 
 - name: Install xdebug if in development
   become: true
   apt:
     name: php-xdebug
     state: present
-  when: php_development
+  when: php7_development
 
 - name: Add xdebug config
   become: true
@@ -63,24 +51,24 @@
     mode: 0644
     owner: root
     group: root
-  when: php_development
+  when: php7_development
 
 - name: Enable xdebug
   become: true
   command: phpenmod xdebug
   args:
     creates: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
-  notify: restart php-fpm
-  when: php_development
+  notify: restart php7-fpm
+  when: php7_development
 
-- name: Stat {{ php_project_root }}
+- name: Stat {{ php7_project_root }}
   stat:
-    path: "{{ php_project_root }}/composer.json"
+    path: "{{ php7_project_root }}/composer.json"
   register: composer_file
 
-- name: "Run composer if {{ php_project_root }}/composer.json exists"
+- name: "Run composer if {{ php7_project_root }}/composer.json exists"
   command: composer install
   args:
-    creates: "{{ php_project_root }}/vendor"
-    chdir: "{{ php_project_root }}"
+    creates: "{{ php7_project_root }}/vendor"
+    chdir: "{{ php7_project_root }}"
   when: composer_file.stat.exists

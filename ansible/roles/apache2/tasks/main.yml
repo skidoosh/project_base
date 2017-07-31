@@ -1,0 +1,72 @@
+- name: Include global variables
+  include_vars: variables/main.yml
+
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install packages
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ __apache2_packages }}"
+
+- name: Enable mod_ssl
+  become: true
+  apache2_module:
+    name: ssl
+    state: present
+  notify: restart apache2
+
+- name: Create apache2 config
+  become: true
+  template:
+    src: apache2.conf.j2
+    dest: /etc/apache2/apache2.conf
+  notify: restart apache2
+
+- name: Create mod_evasive config
+  become: true
+  template:
+    src: evasive.conf.j2
+    dest: /etc/apache2/mods-available/evasive.conf
+  notify: restart apache2
+
+- name: Create mod_evasive log directory
+  become: true
+  file:
+    path: "{{ apache2_evasive_log_dir }}"
+    state: directory
+    owner: root
+    group: www-data
+    mode: 0330
+
+- name: Disable default sites
+  become: true
+  command: "a2dissite  {{ item }}"
+  with_items: "{{ apache2_configs }}"
+  notify: restart apache2
+
+- name: Create vhosts
+  become: true
+  template:
+    src: vhost.conf.j2
+    dest: "/etc/apache2/sites-available/{{ item.server_name }}.conf"
+  with_items: "{{ apache2_vhosts }}"
+  notify: restart apache2
+
+- name: Create vhost log dirs
+  become: true
+  file:
+    path: "/var/log/apache2/{{ item.server_name }}"
+    state: directory
+  with_items: "{{ apache2_vhosts }}"
+
+- name: Enable vhosts
+  become: true
+  command: "a2ensite {{ item.server_name }}"
+  with_items: "{{ apache2_vhosts }}"
+  notify: restart apache2

@@ -1,0 +1,60 @@
+<VirtualHost *:80>
+        ServerName {{ item.server_name }}
+        {% if item.server_alias is defined %}
+        ServerAlias {{ item.server_alias }}
+        {% endif %}
+        ServerAdmin {{ item.server_admin }}
+        DocumentRoot {{ item.server_root }}
+
+        <Directory {{ item.server_root }}>
+            Options FollowSymLinks
+            AllowOverride All
+            Order allow,deny
+            allow from all
+        </Directory>
+
+        LogLevel warn
+        ErrorLog ${APACHE_LOG_DIR}/{{ item.server_name }}/error.log
+        CustomLog ${APACHE_LOG_DIR}/{{ item.server_name }}/access.log combined
+</VirtualHost>
+
+{% if item.ssl_certificate_file is defined %}
+<VirtualHost *:443>
+    ServerName {{ item.server_name }}
+    {% if item.server_alias is defined %}
+    ServerAlias {{ item.server_alias }}
+    {% endif %}
+    ServerAdmin {{ item.server_admin }}
+    DocumentRoot {{ item.server_root }}
+
+    <Directory {{ item.server_root }}>
+        Options FollowSymLinks
+        AllowOverride All
+        Order allow,deny
+        allow from all
+    </Directory>
+
+    ErrorLog /var/log/apache2/{{ item.server_name }}/error.log
+    CustomLog /var/log/apache2/{{ item.server_name }}/access.log combined
+
+    SSLEngine on
+    SSLCertificateFile {{ item.ssl_certificate_file }}
+    SSLCertificateKeyFile {{ item.ssl_key_file }}
+    SSLCertificateChainFile {{ item.ssl_chain_file }}
+
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+        SSLOptions +StdEnvVars
+    </FilesMatch>
+
+    <Directory /usr/lib/cgi-bin>
+        SSLOptions +StdEnvVars
+    </Directory>
+
+    BrowserMatch "MSIE [2-6]" \
+        nokeepalive ssl-unclean-shutdown \
+        downgrade-1.0 force-response-1.0
+
+    # MSIE 7 and newer should be able to use keepalive
+    BrowserMatch "MSIE [17-9]" ssl-unclean-shutdown
+</VirtualHost>
+{% endif %}

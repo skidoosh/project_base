@@ -1,0 +1,51 @@
+- name: Include global variables
+  include_vars: variables/main.yml
+
+- name: Update apt cache
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install dependencies
+  become: true
+  apt:
+    name: "{{ item }}"
+    state: latest
+  with_items: "{{ __modsecurity_packages }}"
+
+- name: Create config
+  become: true
+  template:
+    src: modsecurity.conf.j2
+    dest: /etc/modsecurity/modsecurity.conf
+  notify: restart apache2
+
+- name: Create log directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: root
+    group: www-data
+    mode: 0330
+  with_items:
+    - "{{ modsec_audit_log_storage_dir }}"
+    - "{{ modsec_log_dir }}"
+
+- name: Create data directories
+  become: true
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "{{ modsec_upload_dir }}"
+    - "{{ modsec_data_dir }}"
+    - "{{ modsec_tmp_dir }}"
+
+- name: Enable mod_security
+  become: true
+  apache2_module:
+    name: security2
+    state: present
+  notify: restart apache2

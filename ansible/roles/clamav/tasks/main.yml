@@ -12,7 +12,7 @@
   apt:
     name: "{{ item }}"
     state: latest
-  with_items: "{{ __packages }}"
+  with_items: "{{ __clamav_packages }}"
 
 - name: Start clamav-freshclam
   become: true

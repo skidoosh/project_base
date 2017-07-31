@@ -1,9 +1,27 @@
 ---
 - hosts: all
   roles:
-  - role: ansible/roles/php
-    php_development: true
-    php_project_root: /var/www/src
+  - role: ansible/roles/php7
+    php7_development: true
+    php7_project_root: /var/www/src
+    apache2_vhosts:
+    - server_name: quarantine.safetylearning.co.uk
+      server_alias: quarantine-alias.safetylearning.co.uk
+      server_admin: glyn.mooney@gmail.com
+      server_root: /var/www/src/public
+    - server_name: quarantine-ssl.safetylearning.co.uk
+      server_admin: glyn.mooney@gmail.com
+      server_root: /var/www/src/public
+      ssl_certificate_file: /etc/ssl/star_safetylearning_co_uk/star_safetylearning_co_uk.crt
+      ssl_key_file: /etc/ssl/star_safetylearning_co_uk/star_safetylearning_co_uk.key
+      ssl_chain_file: /etc/ssl/star_safetylearning_co_uk/DigiCertCA.crt
+    ssl_certificates:
+      - src: /vagrant/srv/certs/star_safetylearning_co_uk.crt
+        dest: /etc/ssl/star_safetylearning_co_uk/star_safetylearning_co_uk.crt
+      - src: /vagrant/srv/certs/star_safetylearning_co_uk.key
+        dest: /etc/ssl/star_safetylearning_co_uk/star_safetylearning_co_uk.key
+      - src: /vagrant/srv/certs/DigiCertCA.crt
+        dest: /etc/ssl/star_safetylearning_co_uk/DigiCertCA.crt
     mysql_databases:
     - name: 'application'
     - name: 'testing'
@@ -14,6 +32,7 @@
     - name: 'testing'
       password: 'testing'
       priv: 'testing.*:SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER,DROP'
+  - role: ansible/roles/modsecurity
   - role: ansible/roles/nodejs
   - role: ansible/roles/clamav
     cron_tabs:

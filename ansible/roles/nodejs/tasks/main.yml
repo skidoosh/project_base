@@ -22,4 +22,8 @@
   apt:
     name: "{{ item }}"
     state: latest
-  with_items: "{{ __packages }}"
+  with_items: "{{ __nodejs_packages }}"
+
+- name: Update npm to the latest revision
+  become: true
+  shell: "npm install self-update"
