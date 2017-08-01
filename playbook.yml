@@ -32,6 +32,7 @@
     - name: 'testing'
       password: 'testing'
       priv: 'testing.*:SELECT,INSERT,UPDATE,DELETE,CREATE,ALTER,DROP'
+  - role: ansible/roles/modevasive
   - role: ansible/roles/modsecurity
   - role: ansible/roles/nodejs
   - role: ansible/roles/clamav
