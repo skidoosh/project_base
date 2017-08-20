@@ -24,17 +24,6 @@
     backup: true
   notify: restart php7-fpm
 
-#- name: Install nginx server config
-#  become: true
-#  copy:
-#    src: files/nginx.default
-#    dest: /etc/nginx/sites-available/default
-#    backup: true
-#    owner: root
-#    group: root
-#    mode: 0755
-#  notify: restart nginx
-
 - name: Install xdebug if in development
   become: true
   apt:
@@ -60,6 +49,12 @@
     creates: /etc/php/7.0/fpm/conf.d/20-xdebug.ini
   notify: restart php7-fpm
   when: php7_development
+
+- name: Disable xdebug for cli
+  become: true
+  file:
+    path: /etc/php/7.0/cli/conf.d/20-xdebug.ini
+    state: absent
 
 - name: Stat {{ php7_project_root }}
   stat:

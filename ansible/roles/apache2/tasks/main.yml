@@ -7,6 +7,10 @@
     update_cache: yes
     cache_valid_time: 3600
 
+- name: Get deployment user
+  set_fact:
+    ansible_user: "{{ lookup('env', 'USER') }}"
+
 - name: Install packages
   become: true
   apt:
@@ -58,3 +62,18 @@
   command: "a2ensite {{ item.server_name }}"
   with_items: "{{ apache2_vhosts }}"
   notify: restart apache2
+
+- name: "Add admin user {{ ansible_user }} to www-data group"
+  become: true
+  user:
+    name: "{{ ansible_user }}"
+    groups: www-data
+    append: true
+
+- name: Set group write group on /var/www
+  become: true
+  file:
+    path: /var/www
+    mode: 0775
+    owner: root
+    group: www-data
