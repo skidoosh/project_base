@@ -1,5 +1,0 @@
----
-dependencies:
-  - { role: redis }
-  - { role: apache2 }
-  - { role: mysql }

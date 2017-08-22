@@ -1,9 +1,0 @@
----
-__mysql_packages:
-  - mysql-server
-  - mysql-client
-  - mysql-common
-  - python-mysqldb
-
-mysql_staging: false
-mysql_testing: false

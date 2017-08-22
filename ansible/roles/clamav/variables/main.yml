@@ -1,6 +1,0 @@
----
-__clamav_packages:
-  - clamav-daemon
-  - clamav-freshclam
-
-quarantine: /var/tmp/quarantine

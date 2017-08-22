@@ -1,3 +1,6 @@
 [submodule "src"]
 	path = src
 	url = https://bitbucket.org/skidoosh/quarantine.git
+[submodule "ansible"]
+	path = ansible
+	url = https://github.com/skidoosh/ansible.git

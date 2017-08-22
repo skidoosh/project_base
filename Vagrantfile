@@ -17,7 +17,7 @@ Vagrant.configure("2") do |config|
                                                    :type => "virtualbox",
                                                    :owner => "www-data",
                                                    :group => "www-data",
-                                                   :mount_options => ["dmode=777,fmode=777"]
+                                                   :mount_options => ["dmode=775,fmode=775"]
   config.vm.provider "virtualbox" do |vb|
     vb.gui = false
     vb.cpus = 2
